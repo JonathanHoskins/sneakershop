@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nike Sneaker Shop</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🏀 Nike Sneaker Shop</h1>
+            <nav>
+                <button class="nav-btn active" data-filter="all">All Shoes</button>
+                <button class="nav-btn" data-filter="available">Available Now</button>
+                <button class="nav-btn" data-filter="coming-soon">Coming Soon</button>
+                <button class="nav-btn" data-filter="rare">Rare & Affordable</button>
+                <button class="nav-btn" data-filter="wishlist">My Wishlist</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="shoes-grid" class="shoes-grid">
+            <!-- Shoes will be loaded here dynamically -->
+        </div>
+    </main>
+
+    <!-- Modal for email notifications -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Get Notified on Release</h2>
+            <p id="modalShoeName"></p>
+            <input type="email" id="emailInput" placeholder="Enter your email" required>
+            <button id="subscribeBtn" class="btn btn-primary">Subscribe</button>
+        </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
