@@ -50,6 +50,20 @@ The application will start on `http://localhost:3000`
 - **Frontend**: Vanilla JavaScript, HTML5, CSS3
 - **Styling**: Custom CSS with gradient backgrounds and animations
 
+## Known Limitations
+
+- **In-Memory Storage**: Wishlist and email subscriptions are stored in memory and will be reset when the server restarts. For production use, consider implementing persistent storage with a database like MongoDB or PostgreSQL.
+- **Email Configuration**: The email notification system is set up but requires SMTP configuration to send actual emails. Currently, subscriptions are logged to the console. To enable real email sending, configure nodemailer with your SMTP credentials in the server.js file.
+
+## Future Enhancements
+
+- Add database persistence for wishlist and subscriptions
+- Implement user authentication
+- Configure real email sending with SMTP
+- Add more shoes and categories
+- Implement search functionality
+- Add shoe size selection
+
 ## Screenshot
 
 ![Nike Sneaker Shop](https://github.com/user-attachments/assets/68376ec2-07e5-441f-8bfd-531f0e754961)

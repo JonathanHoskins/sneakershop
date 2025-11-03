@@ -179,8 +179,21 @@ app.post('/api/subscribe', (req, res) => {
   
   emailSubscriptions.get(email).add(parseInt(shoeId));
   
-  // In a production environment, you would configure nodemailer with real SMTP settings
-  // For now, we'll just log the subscription
+  // Note: To send actual emails, configure nodemailer with SMTP settings:
+  // const transporter = nodemailer.createTransport({
+  //   host: 'smtp.example.com',
+  //   port: 587,
+  //   secure: false,
+  //   auth: { user: 'your-email@example.com', pass: 'your-password' }
+  // });
+  // await transporter.sendMail({
+  //   from: 'notifications@sneakershop.com',
+  //   to: email,
+  //   subject: `${shoe.name} Release Notification`,
+  //   text: `${shoe.name} will be released on ${shoe.releaseDate}!`
+  // });
+  
+  // For now, we just log the subscription
   console.log(`Email subscription: ${email} subscribed to shoe ID ${shoeId} (${shoe.name})`);
   
   res.json({ 
