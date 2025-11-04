@@ -14,10 +14,63 @@ Thank you for your interest in contributing to Nike Sneaker Shop! 🏀
    ```bash
    npm install
    ```
-4. **Create a feature branch**:
+4. **Understand the project** using Spec Kit:
+   ```bash
+   # Read the project specification
+   cat .specify/spec.md
+   
+   # Read the project principles
+   cat .specify/constitution.md
+   
+   # Read the technical plan
+   cat .specify/plan.md
+   ```
+5. **Create a feature branch**:
    ```bash
    git checkout -b feature/your-feature-name
    ```
+
+## Specification-Driven Development Workflow
+
+This project uses [GitHub Spec Kit](https://github.com/github/spec-kit) for specification-driven development. Before writing code, you should create or reference a specification.
+
+### For New Features
+
+1. **Create a Task Specification**:
+   ```bash
+   # Create a new task file
+   touch .specify/tasks/your-feature-name.md
+   ```
+   
+   Use existing tasks as templates:
+   - `.specify/tasks/add-price-alert-feature.md` (complex feature)
+   - `.specify/tasks/add-search-feature.md` (simple feature)
+
+2. **Include in Your Specification**:
+   - Status (Not Started, In Progress, Completed)
+   - Description and context
+   - Functional requirements
+   - Technical approach
+   - API changes (if applicable)
+   - UI/UX changes
+   - Testing plan
+   - Success criteria
+
+3. **Get Specification Reviewed**:
+   - Create a PR with your spec (use `docs:` prefix)
+   - Get feedback before implementation
+   - Ensure alignment with `.specify/spec.md` and `.specify/constitution.md`
+
+### For Bug Fixes
+
+1. **Reference Existing Specs**:
+   - Check `.specify/spec.md` for expected behavior
+   - Follow standards in `.specify/constitution.md`
+   - Keep fixes minimal and focused
+
+2. **Document If Needed**:
+   - Update specs if behavior changes
+   - Add notes about edge cases discovered
 
 ## Development Workflow
 
@@ -70,6 +123,11 @@ Follow conventional commit format:
 - `style:` - Code style changes (formatting)
 - `chore:` - Maintenance tasks
 
+**Reference task specifications in commits:**
+```bash
+git commit -m "feat: add search feature per .specify/tasks/add-search-feature.md"
+```
+
 ### 5. Push and Create PR
 
 ```bash
@@ -89,6 +147,7 @@ Use clear, descriptive titles:
 
 ### PR Description
 Include:
+- **Specification**: Link to the task specification (if applicable)
 - **What**: What changes did you make?
 - **Why**: Why are these changes needed?
 - **How**: How did you implement them?
@@ -96,20 +155,25 @@ Include:
 
 ### Example PR Description:
 ```markdown
+## Specification
+Implements: `.specify/tasks/add-search-feature.md`
+
 ## What
-Added ability to sort shoes by popularity (views + wishlist count)
+Added search functionality allowing users to search shoes by name
 
 ## Why
-Users want to see the most popular shoes first to discover trending items
+Users need a way to find specific shoes quickly as the catalog grows
 
 ## How
-- Added `views` and `wishlist_count` columns to shoes table
-- Implemented sorting query parameter in GET /api/shoes endpoint
-- Auto-increment view count when viewing shoe details
+- Modified GET /api/shoes to accept search parameter
+- Added search input box with real-time filtering
+- Implemented debouncing to prevent excessive API calls
+- Added "No results" message for empty searches
 
 ## Testing
-- ✅ Tested sorting manually with different query params
-- ✅ Verified view counts increment correctly
+- ✅ Search filters shoes by name (case-insensitive)
+- ✅ Search works with existing filters and sorting
+- ✅ Debouncing prevents API spam
 - ✅ All existing tests pass
 ```
 
@@ -172,6 +236,97 @@ To add shoes to the database:
    ```bash
    npm run test-links
    ```
+
+## Specification-Driven Development Guide
+
+### What is Spec Kit?
+
+This project uses GitHub's Spec Kit for specification-driven development (SDD). Specifications are living documents that guide all development work.
+
+### Key Specification Files
+
+- **`.specify/spec.md`** - Main project specification (vision, features, standards)
+- **`.specify/plan.md`** - Technical implementation plan (architecture, design)
+- **`.specify/constitution.md`** - Project principles and best practices
+- **`.specify/tasks/`** - Individual feature specifications
+
+### When to Create a Task Specification
+
+Create a task spec for:
+- ✅ New features (any size)
+- ✅ Complex bug fixes that change behavior
+- ✅ API changes or additions
+- ✅ Database schema changes
+- ✅ Significant refactoring
+
+You don't need a task spec for:
+- ❌ Simple typo fixes
+- ❌ Dependency updates (unless they change functionality)
+- ❌ Minor style tweaks
+
+### Task Specification Template
+
+```markdown
+# Task: [Feature Name]
+
+## Status
+Not Started / In Progress / Completed
+
+## Description
+Clear description of what needs to be done
+
+## Context
+Why this feature is needed
+
+## Requirements
+### Functional Requirements
+- Requirement 1
+- Requirement 2
+
+### Non-Functional Requirements
+- Performance requirements
+- Security requirements
+
+## Technical Approach
+How you plan to implement it
+
+## Implementation Steps
+1. Step 1
+2. Step 2
+
+## Testing
+- [ ] Test case 1
+- [ ] Test case 2
+
+## Success Criteria
+- [ ] Criterion 1
+- [ ] Criterion 2
+```
+
+### Using Spec Kit with AI Assistants
+
+When working with AI coding assistants (GitHub Copilot, Claude, etc.), provide them with specifications:
+
+```
+Please implement the feature described in .specify/tasks/add-search-feature.md
+
+Context:
+- Read .specify/spec.md for project standards
+- Read .specify/constitution.md for code quality principles
+- Read .specify/plan.md for technical architecture
+
+Follow all specifications and maintain consistency with existing code.
+```
+
+### Updating Specifications
+
+Specifications should evolve with the code:
+- Update specs when requirements change
+- Document decisions and rationale
+- Keep specs in sync with implementation
+- Review specs during code reviews
+
+For more details, see `.specify/README.md`.
 
 ## Questions?
 
