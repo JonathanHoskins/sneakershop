@@ -472,12 +472,17 @@ app.delete('/api/wishlist/:id', requireAuth, (req, res) => {
 });
 
 // Subscribe to email notifications
-// Subscribe to email notifications
 app.post('/api/subscribe', (req, res) => {
   const { email, shoeId } = req.body;
   
   if (!email || !shoeId) {
     return res.status(400).json({ error: 'Email and shoe ID required' });
+  }
+  
+  // Server-side email validation
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ error: 'Invalid email format' });
   }
   
   try {
