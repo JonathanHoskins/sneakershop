@@ -175,6 +175,12 @@ app.post('/api/subscribe', (req, res) => {
     return res.status(400).json({ error: 'Email and shoe ID required' });
   }
   
+  // Server-side email validation
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ error: 'Invalid email format' });
+  }
+  
   const shoe = shoes.find(s => s.id === parseInt(shoeId));
   if (!shoe) {
     return res.status(404).json({ error: 'Shoe not found' });
