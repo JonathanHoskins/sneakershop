@@ -1,0 +1,29 @@
+{
+  "name": "sneakershop",
+  "version": "1.0.0",
+  "description": "A website to view cool Nike shoes that are currently available and soon to be released",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test-links": "node test-links.js",
+    "test-images": "node test-images.js",
+    "view-db": "node view-database.js"
+  },
+  "keywords": [
+    "nike",
+    "sneakers",
+    "shoes"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "better-sqlite3": "^12.4.1",
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "express-rate-limit": "^8.2.1",
+    "express-session": "^1.18.2",
+    "nodemailer": "^7.0.10"
+  }
+}
