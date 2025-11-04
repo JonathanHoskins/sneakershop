@@ -89,6 +89,11 @@ The application will start on `http://localhost:3000`
 - `npm run test-links` - Validate all store links
 - `npm run test-images` - Validate all shoe images
 - `npm run view-db` - View database contents and stats
+- `npm run spec:demo` - Interactive Spec Kit demo and guide
+- `npm run spec:read` - View main project specification
+- `npm run spec:plan` - View technical implementation plan
+- `npm run spec:constitution` - View project principles
+- `npm run spec:tasks` - List all task specifications
 
 ## Usage
 
@@ -333,6 +338,11 @@ GitHub Actions workflow runs on every PR:
 This project uses [GitHub Spec Kit](https://github.com/github/spec-kit) for specification-driven development (SDD). All project specifications, technical plans, and task definitions are maintained in the `.specify/` directory.
 
 ### Quick Start with Spec Kit
+
+**Interactive Demo:**
+```bash
+npm run spec:demo
+```
 
 **Understanding the Project:**
 1. Read `.specify/spec.md` - Main project specification

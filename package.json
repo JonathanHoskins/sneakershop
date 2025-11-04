@@ -12,7 +12,8 @@
     "spec:read": "cat .specify/spec.md",
     "spec:plan": "cat .specify/plan.md",
     "spec:constitution": "cat .specify/constitution.md",
-    "spec:tasks": "ls -la .specify/tasks/"
+    "spec:tasks": "ls -la .specify/tasks/",
+    "spec:demo": "bash spec-kit-demo.sh"
   },
   "keywords": [
     "nike",
