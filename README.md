@@ -436,4 +436,6 @@ email_subscriptions (id, email, shoe_id, created_at)
 
 ## Screenshot
 
-![Nike Sneaker Shop](https://github.com/user-attachments/assets/68376ec2-07e5-441f-8bfd-531f0e754961)
+![Nike Sneaker Shop - Updated UI with Authentication and Database](Screenshot%202025-11-03%20214554.png)
+
+*Modern Nike Sneaker Shop featuring user authentication, persistent wishlists, and SQLite database backend.*
