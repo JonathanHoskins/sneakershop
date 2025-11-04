@@ -2,6 +2,7 @@
 let allShoes = [];
 let wishlistIds = new Set();
 let currentFilter = 'all';
+let currentUser = null;
 
 // Elements
 const shoesGrid = document.getElementById('shoes-grid');
@@ -13,16 +14,61 @@ const subscribeBtn = document.getElementById('subscribeBtn');
 const modalShoeName = document.getElementById('modalShoeName');
 const toast = document.getElementById('toast');
 
+// Auth elements
+const loginModal = document.getElementById('loginModal');
+const registerModal = document.getElementById('registerModal');
+const closeLoginModal = document.querySelector('.close-login');
+const closeRegisterModal = document.querySelector('.close-register');
+const loginBtn = document.getElementById('loginBtn');
+const registerBtn = document.getElementById('registerBtn');
+const logoutBtn = document.getElementById('logoutBtn');
+const loginForm = document.getElementById('loginForm');
+const registerForm = document.getElementById('registerForm');
+const authSection = document.getElementById('authSection');
+const userSection = document.getElementById('userSection');
+const userEmail = document.getElementById('userEmail');
+
 let selectedShoeForNotification = null;
 
 // Initialize
 init();
 
 async function init() {
+    await checkAuthStatus();
     await loadShoes();
-    await loadWishlist();
+    if (currentUser) {
+        await loadWishlist();
+    }
     renderShoes();
     setupEventListeners();
+}
+
+// Check authentication status
+async function checkAuthStatus() {
+    try {
+        const response = await fetch('/api/auth/status');
+        const data = await response.json();
+        if (data.authenticated) {
+            currentUser = data.user;
+            updateAuthUI();
+        }
+    } catch (error) {
+        console.error('Error checking auth status:', error);
+    }
+}
+
+// Update UI based on auth state
+function updateAuthUI() {
+    if (currentUser) {
+        loginBtn.style.display = 'none';
+        registerBtn.style.display = 'none';
+        userSection.style.display = 'flex';
+        userEmail.textContent = currentUser.email;
+    } else {
+        loginBtn.style.display = 'inline-block';
+        registerBtn.style.display = 'inline-block';
+        userSection.style.display = 'none';
+    }
 }
 
 // Event Listeners
@@ -40,13 +86,36 @@ function setupEventListeners() {
         modal.style.display = 'none';
     });
 
+    closeLoginModal.addEventListener('click', () => {
+        loginModal.style.display = 'none';
+    });
+
+    closeRegisterModal.addEventListener('click', () => {
+        registerModal.style.display = 'none';
+    });
+
     window.addEventListener('click', (e) => {
         if (e.target === modal) {
             modal.style.display = 'none';
         }
+        if (e.target === loginModal) {
+            loginModal.style.display = 'none';
+        }
+        if (e.target === registerModal) {
+            registerModal.style.display = 'none';
+        }
     });
 
     subscribeBtn.addEventListener('click', handleEmailSubscribe);
+    loginBtn.addEventListener('click', () => {
+        loginModal.style.display = 'block';
+    });
+    registerBtn.addEventListener('click', () => {
+        registerModal.style.display = 'block';
+    });
+    logoutBtn.addEventListener('click', handleLogout);
+    loginForm.addEventListener('submit', handleLogin);
+    registerForm.addEventListener('submit', handleRegister);
 }
 
 // API Calls
@@ -61,16 +130,33 @@ async function loadShoes() {
 }
 
 async function loadWishlist() {
+    if (!currentUser) {
+        wishlistIds = new Set();
+        return;
+    }
+    
     try {
         const response = await fetch('/api/wishlist');
+        if (response.status === 401) {
+            // User not authenticated
+            wishlistIds = new Set();
+            return;
+        }
         const wishlistShoes = await response.json();
         wishlistIds = new Set(wishlistShoes.map(shoe => shoe.id));
     } catch (error) {
         console.error('Error loading wishlist:', error);
+        wishlistIds = new Set();
     }
 }
 
 async function toggleWishlist(shoeId) {
+    if (!currentUser) {
+        showToast('Please login to use the wishlist', 'error');
+        loginModal.style.display = 'block';
+        return;
+    }
+    
     const isInWishlist = wishlistIds.has(shoeId);
     
     try {
@@ -197,16 +283,29 @@ function createShoeCard(shoe) {
         releaseInfo = `<div class="release-date">📅 Release: ${shoe.releaseDate}</div>`;
     }
     
+    // Create clickable store links
+    let storeLinks = '';
+    if (shoe.stores && shoe.stores.length > 0) {
+        storeLinks = shoe.stores.map(store => {
+            if (typeof store === 'object' && store.name && store.url) {
+                return `<a href="${store.url}" target="_blank" rel="noopener noreferrer" class="store-link">${store.name}</a>`;
+            } else {
+                // Fallback for plain text store names
+                return `<span class="store-name">${store}</span>`;
+            }
+        }).join(' ');
+    }
+    
     return `
         <div class="shoe-card">
-            <img src="${shoe.image}" alt="${shoe.name}" class="shoe-image">
+            <img src="${shoe.image}" alt="${shoe.name}" class="shoe-image" onerror="this.src='https://via.placeholder.com/300x200/CCCCCC/FFFFFF?text=Image+Not+Available'">
             <h3 class="shoe-name">${shoe.name}</h3>
             <div class="shoe-price">$${shoe.price}</div>
             <span class="shoe-availability ${statusClass}">${shoe.availability}</span>
             ${releaseInfo}
             <div class="shoe-stores">
-                <strong>Available at:</strong>
-                ${shoe.stores.join(', ')}
+                <strong>🛒 Buy from:</strong><br>
+                ${storeLinks}
             </div>
             <div class="shoe-actions">
                 <button id="wishlist-${shoe.id}" class="${wishlistBtnClass}">
@@ -238,4 +337,103 @@ function showToast(message, type = 'success') {
     setTimeout(() => {
         toast.className = 'toast';
     }, 3000);
+}
+
+// Authentication handlers
+async function handleLogin(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    try {
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            currentUser = data.user;
+            updateAuthUI();
+            loginModal.style.display = 'none';
+            loginForm.reset();
+            showToast('Login successful!', 'success');
+            await loadWishlist();
+            renderShoes();
+        } else {
+            showToast(data.error || 'Login failed', 'error');
+        }
+    } catch (error) {
+        showToast('Login failed', 'error');
+        console.error('Error:', error);
+    }
+}
+
+async function handleRegister(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('registerEmail').value;
+    const password = document.getElementById('registerPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    
+    if (password !== confirmPassword) {
+        showToast('Passwords do not match', 'error');
+        return;
+    }
+    
+    if (!isValidEmail(email)) {
+        showToast('Please enter a valid email', 'error');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            currentUser = data.user;
+            updateAuthUI();
+            registerModal.style.display = 'none';
+            registerForm.reset();
+            showToast('Registration successful!', 'success');
+            await loadWishlist();
+            renderShoes();
+        } else {
+            showToast(data.error || 'Registration failed', 'error');
+        }
+    } catch (error) {
+        showToast('Registration failed', 'error');
+        console.error('Error:', error);
+    }
+}
+
+async function handleLogout() {
+    try {
+        const response = await fetch('/api/auth/logout', {
+            method: 'POST'
+        });
+        
+        if (response.ok) {
+            currentUser = null;
+            wishlistIds = new Set();
+            updateAuthUI();
+            showToast('Logged out successfully', 'success');
+            renderShoes();
+        }
+    } catch (error) {
+        showToast('Logout failed', 'error');
+        console.error('Error:', error);
+    }
 }
