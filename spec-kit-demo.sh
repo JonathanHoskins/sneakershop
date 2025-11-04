@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Demo script for GitHub Spec Kit usage in the sneakershop project
 # This script demonstrates how to use the specification files
