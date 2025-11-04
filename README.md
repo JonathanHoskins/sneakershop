@@ -66,6 +66,7 @@ A modern, elegant website to browse and track cool Nike shoes that are available
 - **Frontend**: Vanilla JavaScript, HTML5, CSS3
 - **Testing**: Custom link & image validation tests
 - **CI/CD**: GitHub Actions
+- **Development**: Specification-Driven Development with GitHub Spec Kit
 
 ## Installation
 
@@ -326,6 +327,35 @@ GitHub Actions workflow runs on every PR:
 - ✅ Syntax checks
 - ✅ Security audit
 - ✅ Multi-version Node.js testing (18.x, 20.x)
+
+## Specification-Driven Development
+
+This project uses [GitHub Spec Kit](https://github.com/github/spec-kit) for specification-driven development (SDD). All project specifications, technical plans, and task definitions are maintained in the `.specify/` directory.
+
+### Quick Start with Spec Kit
+
+**Understanding the Project:**
+1. Read `.specify/spec.md` - Main project specification
+2. Read `.specify/constitution.md` - Project principles and standards
+3. Read `.specify/plan.md` - Technical implementation plan
+
+**Adding New Features:**
+1. Create a task specification in `.specify/tasks/`
+2. Follow the specification during implementation
+3. Update specs if requirements change
+4. Reference the task in your PR
+
+**Example Task Specifications:**
+- `.specify/tasks/add-price-alert-feature.md` - Complex feature example
+- `.specify/tasks/add-search-feature.md` - Simple feature example
+
+For detailed guidance on using Spec Kit in this project, see `.specify/README.md`.
+
+### Benefits
+- **Clear Requirements**: Every feature has a detailed specification
+- **Better Collaboration**: Specs provide context for AI assistants and team members
+- **Consistent Quality**: Standards defined in constitution.md guide all development
+- **Living Documentation**: Specifications evolve with the codebase
 
 ## Contributing
 

@@ -8,7 +8,11 @@
     "dev": "node server.js",
     "test-links": "node test-links.js",
     "test-images": "node test-images.js",
-    "view-db": "node view-database.js"
+    "view-db": "node view-database.js",
+    "spec:read": "cat .specify/spec.md",
+    "spec:plan": "cat .specify/plan.md",
+    "spec:constitution": "cat .specify/constitution.md",
+    "spec:tasks": "ls -la .specify/tasks/"
   },
   "keywords": [
     "nike",
